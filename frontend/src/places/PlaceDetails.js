@@ -6,9 +6,7 @@ import NewCommentForm from "./NewCommentForm";
 function PlaceDetails() {
 
 	const { placeId } = useParams()
-
 	const history = useHistory()
-
 	const [place, setPlace] = useState(null)
 
 	useEffect(() => {
@@ -50,14 +48,13 @@ function PlaceDetails() {
 	async function createComment(commentAttributes) {
 		const response = await fetch(`http://localhost:5000/places/${place.placeId}/comments`, {
 			method: 'POST',
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(commentAttributes)
 		})
-
 		const comment = await response.json()
-
 		setPlace({
 			...place,
 			comments: [
@@ -65,8 +62,9 @@ function PlaceDetails() {
 				comment
 			]
 		})
-
+	
 	}
+	
 
 
 
@@ -101,6 +99,20 @@ function PlaceDetails() {
 		})
 	}
 
+	let placeActions = null
+
+	if (currentUser?.role === 'admin') {
+		placeActions = (
+			<>
+				<a className="btn btn-warning" onClick={editPlace}>
+					Edit
+				</a>
+				<button type="submit" className="btn btn-danger" onClick={deletePlace}>
+					Delete
+				</button>
+			</>
+		)
+	}
 
 	return (
 		<main>
@@ -128,12 +140,7 @@ function PlaceDetails() {
 						Serving {place.cuisines}.
 					</h4>
 					<br />
-					<a className="btn btn-warning" onClick={editPlace}>
-						Edit
-					</a>{` `}
-					<button type="submit" className="btn btn-danger" onClick={deletePlace}>
-						Delete
-					</button>
+					{placeActions}
 				</div>
 			</div>
 			<hr />

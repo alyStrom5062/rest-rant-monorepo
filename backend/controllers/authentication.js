@@ -15,9 +15,10 @@ if (!user || !await bcrypt.compare(req.body.password, user.passwordDigest)) {
    }
     
    router.get('/profile', async (req, res) => {
+        res.json(req.currentUser)
        try {
            const [authenticationMethod, token] = req.headers.authorization.split(' ')
-           
+
            if (authenticationMethod == 'Bearer') {
                const result = await jwt.decode(process.env.JWT_SECRET, token)
                const { id } = result.value
