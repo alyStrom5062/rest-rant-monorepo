@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react"
-import { useHistory } from "react-router"
+import { useState, useEffect, useContext } from "react"
+import { CurrentUser } from '../contexts/CurrentUser'
 
 function NewCommentForm({ place, onSubmit }) {
-
     const [authors, setAuthors] = useState([])
-
     const [comment, setComment] = useState({
         content: '',
         stars: 3,
@@ -36,16 +34,12 @@ function NewCommentForm({ place, onSubmit }) {
             authorId: authors[0]?.userId
         })
     }
-
-
+    
     const { currentUser } = useContext(CurrentUser)
-
+    
     if(!currentUser){
         return <p>You must be logged in to leave a rant or rave.</p>
     }
-
-  
-
 
     return (
         <form onSubmit={handleSubmit}>

@@ -47,8 +47,6 @@ router.get('/:placeId', async (req, res) => {
     }
 })
 
-
-
 router.put('/:placeId', async (req, res) => {
     if(req.currentUser?.role !== 'admin'){
         return res.status(403).json({ message: 'You are not allowed to edit a place'})
@@ -115,7 +113,18 @@ router.post('/:placeId/comments', async (req, res) => {
     } catch {
         currentUser = null;
     }
+
+    const comment = await Comment.create({
+        ...req.body,
+        placeId: placeId
+    })
+
+    res.send({
+        ...comment.toJSON(),
+        author: currentUser
+    })
 })
+
 
 router.delete('/:placeId/comments/:commentId', async (req, res) => {
     let placeId = Number(req.params.placeId)
@@ -143,5 +152,6 @@ router.delete('/:placeId/comments/:commentId', async (req, res) => {
         }
     }
 })
-  
+
+
 module.exports = router

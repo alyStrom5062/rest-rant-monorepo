@@ -19,4 +19,5 @@ module.exports = {
       email: 'admin@example.com'
     })
   }
-};
+}
+
